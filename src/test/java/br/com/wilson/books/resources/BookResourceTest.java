@@ -1,5 +1,6 @@
 package br.com.wilson.books.resources;
 
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 import org.junit.Test;
@@ -8,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import br.com.wilson.books.BooksApplicationTests;
 import br.com.wilson.books.model.Book;
 import io.restassured.http.ContentType;
-
-import static io.restassured.RestAssured.given;
 
 public class BookResourceTest extends BooksApplicationTests {
 	
@@ -78,4 +77,5 @@ public class BookResourceTest extends BooksApplicationTests {
 			.statusCode(HttpStatus.BAD_REQUEST.value())
 			.body("message", equalTo("Field 'title' is required"));
 	}
+	
 }

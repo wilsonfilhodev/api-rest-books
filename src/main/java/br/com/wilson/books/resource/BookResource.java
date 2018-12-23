@@ -1,6 +1,8 @@
 package br.com.wilson.books.resource;
 
+import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,11 +28,6 @@ public class BookResource {
 	@Autowired
 	private BookService bookService;
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<Book> findById(@PathVariable("id") String id) throws BookNotFoundException {
-		return ResponseEntity.status(HttpStatus.OK).body(bookService.findById(id));
-	}
-	
 	@PostMapping
 	public ResponseEntity<Book> adicionarServico(@RequestBody Book book, HttpServletResponse res) throws Exception {
 		Book bookSaved = bookService.save(book);
@@ -40,6 +37,16 @@ public class BookResource {
 		res.setHeader("Location", uri.toASCIIString());
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(bookSaved);
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<Book> findById(@PathVariable("id") String id) throws BookNotFoundException {
+		return ResponseEntity.status(HttpStatus.OK).body(bookService.findById(id));
+	}
+	
+	@GetMapping()
+	public ResponseEntity<List<Book>> findAllBooks() throws IOException {
+		return ResponseEntity.status(HttpStatus.OK).body(bookService.extractDataHtml());
 	}
 
 }

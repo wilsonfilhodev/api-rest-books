@@ -3,9 +3,13 @@ package br.com.wilson.books.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Document
+@JsonInclude(Include.NON_NULL)
 public class Book {
 	
 	@Id
@@ -19,6 +23,9 @@ public class Book {
 	private String isbn;
 	
 	private String language;
+	
+	@JsonIgnore
+	private String href;
 	
 	public Book() {
 	}
@@ -77,6 +84,14 @@ public class Book {
 
 	public void setLanguage(String language) {
 		this.language = language;
+	}
+	
+	public String getHref() {
+		return href;
+	}
+	
+	public void setHref(String href) {
+		this.href = href;
 	}
 
 	@Override

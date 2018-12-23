@@ -1,5 +1,7 @@
 package br.com.wilson.books.handler;
 
+import java.io.IOException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,5 +24,9 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Erro(e.getMessage()));
 	}
 	
+	@ExceptionHandler({ IOException.class })
+	public ResponseEntity<Erro> handleIOException(IOException e) {
+		return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new Erro("Error processing request, please try again"));
+	}
 
 }

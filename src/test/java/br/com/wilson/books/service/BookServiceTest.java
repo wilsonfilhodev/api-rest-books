@@ -4,12 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.util.Optional;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -111,18 +107,6 @@ public class BookServiceTest extends BooksApplicationTests {
 		thrown.expectMessage("Book with id 1234 not found");
 		
 		sut.findById("1234");
-	}
-	
-	@Test
-	public void deve_retornar_todos_os_livros_da_pagina_html() throws IOException {
-		Document doc = Jsoup.connect("https://kotlinlang.org/docs/books.html").get();
-		Elements titles = doc.select("article.page-content h2");
-		Elements languages = doc.select("div.book-lang");
-		
-		for (int i = 0; i < titles.size(); i++) {
-			System.out.println("Title: "+titles.get(i).text());
-			System.out.println("Language: "+languages.get(i).text().toUpperCase());
-		}
 	}
 	
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.wilson.books.model.Book;
+import br.com.wilson.books.model.BooksDTO;
 import br.com.wilson.books.service.BookService;
 import br.com.wilson.books.service.exception.BookNotFoundException;
 
@@ -45,8 +46,9 @@ public class BookResource {
 	}
 	
 	@GetMapping()
-	public ResponseEntity<List<Book>> findAllBooks() throws IOException {
-		return ResponseEntity.status(HttpStatus.OK).body(bookService.extractDataHtml());
+	public ResponseEntity<BooksDTO> findAllBooks() throws IOException {
+		List<Book> books = bookService.extractDataHtml();
+		return ResponseEntity.status(HttpStatus.OK).body(new BooksDTO(books.size(), books));
 	}
 
 }

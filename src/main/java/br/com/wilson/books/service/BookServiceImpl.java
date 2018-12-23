@@ -21,7 +21,7 @@ import br.com.wilson.books.service.exception.RequiredFieldException;
 public class BookServiceImpl implements BookService {
 
 	private BookRepository bookRepository;
-
+	
 	public BookServiceImpl(BookRepository bookRepository) {
 		this.bookRepository = bookRepository;
 	}
@@ -55,12 +55,21 @@ public class BookServiceImpl implements BookService {
 	
 	@Override
 	public List<Book> extractDataHtml() throws IOException {
+		List<Book> books = extractBooks();
+		return books;
+	}
+
+	private List<Book> extractBooks() throws IOException {
 		Book book = new Book();
 		List<Book> books = new ArrayList<>();
 		
+		// connect to the website and get the HTML document
 		Document doc = Jsoup.connect("https://kotlinlang.org/docs/books.html").get();
+		
+		// select all elements child of class page-content
 		Elements elements = doc.select("article.page-content *");
 		
+		// iterate elements and creates objects books
 		for (Element element : elements) {
 			
 			book = addObjectBookInListAndCreateNew(book, books, element);
@@ -71,6 +80,7 @@ public class BookServiceImpl implements BookService {
 				book.setLanguage(element.html().toUpperCase());
 				Element nextElement = elements.get(elements.indexOf(element) + 1);
 				book.setHref(nextElement.attr("href"));
+				findISBNAndSetInBook(book);
 			} else if (element.tagName().equals("p")) {
 				book.setDescription(StringUtils.hasText(book.getDescription()) ? book.getDescription().concat(" "+element.text()) : element.text());
 			}
@@ -79,7 +89,30 @@ public class BookServiceImpl implements BookService {
 		
 		books.add(book);
 		
+		
 		return books;
+	}
+
+	private void findISBNAndSetInBook(Book book) throws IOException {
+		
+		// connect to the website and get the HTML document
+		Document doc = Jsoup.connect(book.getHref()).get();
+		
+		// select the first element that satisfies any of the conditions
+		Element element = doc.select("body li:matches((?i)isbn),"
+							        + "body h2:matches((?i)isbn),"
+						            + "body [itemprop=isbn]").first();
+		
+		// adds content in the ISBN attribute
+		if (element != null) {
+			String parts[] = element.text().split(" ");
+			String lastPart = parts[parts.length - 1];
+			String onlyNumber = lastPart.replaceAll("\\D+","");
+			book.setIsbn(onlyNumber);
+		} else {
+			book.setIsbn("Unavailable");
+		}
+		
 	}
 
 	private Book addObjectBookInListAndCreateNew(Book book, List<Book> books, Element row) {

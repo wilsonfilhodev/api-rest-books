@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Before;
 import org.junit.Rule;
@@ -117,9 +116,12 @@ public class BookServiceTest extends BooksApplicationTests {
 	@Test
 	public void deve_retornar_todos_os_livros_da_pagina_html() throws IOException {
 		Document doc = Jsoup.connect("https://kotlinlang.org/docs/books.html").get();
-		Elements rows = doc.select("article.page-content h2");
-		for (Element row : rows) {
-		  System.out.println("Row: "+row.text());
+		Elements titles = doc.select("article.page-content h2");
+		Elements languages = doc.select("div.book-lang");
+		
+		for (int i = 0; i < titles.size(); i++) {
+			System.out.println("Title: "+titles.get(i).text());
+			System.out.println("Language: "+languages.get(i).text().toUpperCase());
 		}
 	}
 	

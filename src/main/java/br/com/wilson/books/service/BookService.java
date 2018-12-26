@@ -13,6 +13,10 @@ public interface BookService {
 
 	Book findById(String id) throws BookNotFoundException;
 	
-	List<Book> extractDataHtml() throws IOException;
+	List<Book> findAllBooks() throws IOException;
+
+	void deleteAllBooks();
+	
+	void deleteById(String id) throws BookNotFoundException;
 
 }

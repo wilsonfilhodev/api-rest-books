@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,8 +48,20 @@ public class BookResource {
 	
 	@GetMapping()
 	public ResponseEntity<BooksDTO> findAllBooks() throws IOException {
-		List<Book> books = bookService.extractDataHtml();
+		List<Book> books = bookService.findAllBooks();
 		return ResponseEntity.status(HttpStatus.OK).body(new BooksDTO(books.size(), books));
+	}
+	
+	@DeleteMapping
+	public ResponseEntity<Void> deleteAll() {
+		bookService.deleteAllBooks();
+		return ResponseEntity.noContent().build();
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> remove(@PathVariable String id) throws BookNotFoundException {
+		bookService.deleteById(id);
+		return ResponseEntity.noContent().build();
 	}
 
 }

@@ -54,11 +54,37 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public List<Book> extractDataHtml() throws IOException {
-		return extractBooks();
+	public List<Book> findAllBooks() throws IOException {
+		verifyBookWebExistInDataBaseAndSaveIfNotExist();
+		return bookRepository.findAll();
+	}
+	
+	@Override
+	public void deleteAllBooks() {
+		bookRepository.deleteAll();
+	}
+	
+	@Override
+	public void deleteById(String id) throws BookNotFoundException {
+		findById(id);
+		bookRepository.deleteById(id);
 	}
 
-	private List<Book> extractBooks() throws IOException {
+	private void verifyBookWebExistInDataBaseAndSaveIfNotExist() throws IOException {
+		List<Book> booksWebPage = getBooksWebPage();
+		List<Book> booksDataBase = bookRepository.findAll();
+		
+		booksWebPage.parallelStream().forEach(bookWebPage -> {
+			boolean newBook = true;
+			newBook = booksDataBase.stream().noneMatch(obj -> bookWebPage.getHref().equals(obj.getHref()));
+			if (newBook) {
+				bookRepository.save(bookWebPage);
+			}
+		});
+		
+	}
+
+	private List<Book> getBooksWebPage() throws IOException {
 		Book book = new Book();
 		List<Book> books = new ArrayList<>();
 		Element element;
@@ -82,9 +108,8 @@ public class BookServiceImpl implements BookService {
 				Element nextElement = elements.get(elements.indexOf(element) + 1);
 				book.setHref(nextElement.attr("href"));
 			} else if (element.tagName().equals("p")) {
-				book.setDescription(
-						StringUtils.hasText(book.getDescription()) ? book.getDescription().concat(" " + element.text())
-								: element.text());
+				book.setDescription(StringUtils.hasText(book.getDescription()) ? 
+						book.getDescription().concat(" " + element.text()) : element.text());
 			}
 		}
 

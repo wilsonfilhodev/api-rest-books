@@ -20,7 +20,7 @@
 
 2. Go to project folder and execute command.
  ```bash
- mvn spring-boot:run
+ mvn clean spring-boot:run
  ```
  
  **Notes**

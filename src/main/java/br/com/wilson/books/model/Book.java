@@ -37,7 +37,6 @@ public class Book {
 		this.language = language;
 	}
 	
-
 	public Book(String id, String title, String description, String isbn, String language) {
 		this.id = id;
 		this.title = title;
@@ -124,6 +123,5 @@ public class Book {
 			return false;
 		return true;
 	}
-	
 
 }

@@ -1,7 +1,7 @@
 
 <h3>API Rest Books</h3>
 
-<p>API Restfull Example Using Spring Boot + MongoDB + Jsoup</p>
+<p>API Restfull Example Using Spring Boot + MongoDB + Jsoup. In this project you have an example of scraping data using Jsoup.</p>
 
 ## Contents
 

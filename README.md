@@ -60,7 +60,7 @@
 }
 ```
 
-* Get book from webpage (https://kotlinlang.org/docs/books.html)
+* Return all books
 
 **GET** http://localhost:8080/books
 
@@ -84,6 +84,16 @@
         }]
   }
 ```
+**Notes**
+> In this request the api consult the available books in the web page (https://kotlinlang.org/docs/books.html) and if it does not already exist in the internal database the book is saved automatically.
+
+* Delete books by id
+
+**DELETE** http://localhost:8080/books/{id}
+
+* Delete all books
+
+**DELETE** http://localhost:8080/books
 
 ## Authors
 

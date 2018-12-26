@@ -33,6 +33,8 @@
 
 **POST** http://localhost:8080/books
 ```
+  Example data send in body
+  
   {
     "title": "Book title example",
     "description": "Book description example",

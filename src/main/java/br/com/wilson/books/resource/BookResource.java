@@ -31,7 +31,7 @@ public class BookResource {
 	private BookService bookService;
 	
 	@PostMapping
-	public ResponseEntity<Book> adicionarServico(@RequestBody Book book, HttpServletResponse res) throws Exception {
+	public ResponseEntity<Book> create(@RequestBody Book book, HttpServletResponse res) throws Exception {
 		Book bookSaved = bookService.save(book);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
